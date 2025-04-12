@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mente Sana</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("ddfQL982V_cRHnvMY"); // Your public key
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 text-blue-900 p-6">
+  <div class="max-w-4xl mx-auto space-y-10">
+    <h1 class="text-3xl font-bold text-center">Mente Sana: Tu Espacio de Bienestar y Psicología</h1>
+    <p class="text-center">Recibe El Apoyo Que Necesitas Para Mejorar Tu Bienestar Emocional</p>
+
+    <!-- Servicios -->
+    <div class="bg-white p-6 rounded-lg shadow space-y-4">
+      <h2 class="text-2xl font-bold">Nuestros Servicios</h2>
+      <div id="servicios-container"></div>
+    </div>
+
+    <!-- Formulario -->
+    <div>
+      <h2 class="text-2xl font-semibold text-center mb-2">Supera Tus Miedos y Crece: Agenda Tu Terapia</h2>
+      <p class="text-center mb-6">Tu bienestar emocional es una prioridad. Contáctanos para agendar una consulta.</p>
+
+      <form id="formulario" class="space-y-6">
+        <div>
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" required class="w-full border border-gray-300 rounded-md p-2">
+        </div>
+
+        <div>
+          <label for="correo">Correo</label>
+          <input id="correo" name="correo" type="email" required class="w-full border border-gray-300 rounded-md p-2">
+        </div>
+
+        <div>
+          <label for="fecha">Fecha de la Cita</label>
+          <input id="fecha" name="fecha" type="date" required class="w-full border border-gray-300 rounded-md p-2">
+          <p id="fecha-error" class="text-red-600 text-sm hidden"></p>
+        </div>
+
+        <div>
+          <label for="hora">Hora de la Cita</label>
+          <select id="hora" name="hora" required class="w-full border border-gray-300 rounded-md p-2">
+            <option value="">Selecciona una hora</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="servicio">Servicio</label>
+          <select id="servicio" name="servicio" required class="w-full border border-gray-300 rounded-md p-2">
+            <option value="">Selecciona un servicio</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="4" class="w-full border border-gray-300 rounded-md"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Enviar</button>
+      </form>
+    </div>
+
+    <!-- Info -->
+    <div class="space-y-6 mt-12">
+      <div>
+        <h3 class="text-xl font-semibold">Sobre Nosotros</h3>
+        <p>En nuestro negocio, nos esforzamos por ofrecer calidad y un servicio cercano que realmente marque la diferencia...</p>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold">Contáctanos</h3>
+        <p>Correo: <a href="mailto:psicpaolaortiz@hotmail.com" class="text-blue-700 underline">psicpaolaortiz@hotmail.com</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const servicios = [
+      { nombre: "Evaluaciones Psicopedagógicas (Presencial)", precio: "$200", descripcion: "Un proceso que permite conocer el desarrollo de un alumno y sus dificultades de aprendizaje..." },
+      { nombre: "Terapia de Lenguaje (Presencial)", precio: "$200", descripcion: "Tratamiento que ayuda a mejorar las habilidades de comunicación..." },
+      { nombre: "Intervención Psicológica (Presencial)", precio: "$500", descripcion: "Se enfoca en los pensamientos y malestares del paciente." },
+      { nombre: "Terapia Individual (Presencial)", precio: "$300", descripcion: "Tratamiento psicológico entre paciente y terapeuta." },
+      { nombre: "Terapia de Pareja (Presencial)", precio: "$350", descripcion: "Ayuda a las parejas a mejorar su relación." },
+      { nombre: "Terapia Familiar (Presencial)", precio: "$350", descripcion: "Ayuda a las familias a resolver conflictos." },
+      { nombre: "Terapia ACT (Presencial)", precio: "$300", descripcion: "Terapia de aceptación y compromiso (ACT)..." },
+      { nombre: "Terapia Individual (En Línea)", precio: "$250", descripcion: "Tratamiento psicológico entre paciente y terapeuta." },
+      { nombre: "Terapia de Pareja (En Línea)", precio: "$250", descripcion: "Ayuda a las parejas a mejorar su relación." },
+      { nombre: "Terapia Familiar (En Línea)", precio: "$250", descripcion: "Ayuda a las familias a resolver conflictos." },
+      { nombre: "Terapia ACT (En Línea)", precio: "$200", descripcion: "ACT enseña a convivir con pensamientos incómodos." },
+      { nombre: "Intervención Psicológica (En Línea)", precio: "$400", descripcion: "Se enfoca en los pensamientos y malestares del paciente." },
+    ];
+
+    const diasDisponibles = [2, 4, 6, 0]; // martes, jueves, sábado, domingo
+
+    // Render services
+    const serviciosContainer = document.getElementById("servicios-container");
+    servicios.forEach(serv => {
+      serviciosContainer.innerHTML += `
+        <div class="border border-blue-100 rounded p-4 bg-blue-100">
+          <h3 class="font-semibold">${serv.nombre} - ${serv.precio}</h3>
+          <p>${serv.descripcion}</p>
+        </div>
+      `;
+    });
+
+    // Populate servicios dropdown
+    const servicioSelect = document.getElementById("servicio");
+    servicios.forEach(serv => {
+      const option = document.createElement("option");
+      option.value = serv.nombre;
+      option.textContent = `${serv.nombre} - ${serv.precio}`;
+      servicioSelect.appendChild(option);
+    });
+
+    // Populate hours
+    const horaSelect = document.getElementById("hora");
+    for (let i = 10; i <= 17; i++) {
+      const hour = i % 12 === 0 ? 12 : i % 12;
+      const ampm = i >= 12 ? "PM" : "AM";
+      const option = document.createElement("option");
+      option.value = `${hour}:00 ${ampm}`;
+      option.textContent = `${hour}:00 ${ampm}`;
+      horaSelect.appendChild(option);
+    }
+
+    // Form handling
+    document.getElementById("formulario").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const form = {
+        nombre: document.getElementById("nombre").value,
+        correo: document.getElementById("correo").value,
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        servicio: document.getElementById("servicio").value,
+        mensaje: document.getElementById("mensaje").value,
+      };
+
+      const fechaSeleccionada = new Date(form.fecha);
+      const dia = fechaSeleccionada.getUTCDay();
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      fechaSeleccionada.setHours(0, 0, 0, 0);
+
+      const diferencia = (fechaSeleccionada - hoy) / (1000 * 60 * 60 * 24);
+
+      const errorText = document.getElementById("fecha-error");
+      if (!diasDisponibles.includes(dia)) {
+        errorText.textContent = "Solo puedes agendar citas los martes, jueves, sábados y domingos.";
+        errorText.classList.remove("hidden");
+        return;
+      } else if (diferencia < 1) {
+        errorText.textContent = "Debes agendar tu cita al menos con un día de anticipación.";
+        errorText.classList.remove("hidden");
+        return;
+      } else {
+        errorText.classList.add("hidden");
+      }
+
+      emailjs.send("service_yourserviceid", "template_zc1nqx6", form)
+        .then(res => {
+          alert("Formulario enviado exitosamente.");
+        })
+        .catch(err => {
+          console.error("Error:", err);
+          alert("Hubo un error al enviar el formulario.");
+        });
+    });
+  </script>
+</body>
+</html>
